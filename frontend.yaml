@@ -21,21 +21,16 @@
       path: /usr/share/nginx/html/*
       state: absent
 
-  - name: Download the frontend
-    ansible.builtin.get_url:
-      url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
-      dest: /tmp/frontend.zip
-
   - name: add directory
     ansible.builtin.file:
       path: /usr/share/nginx/html
       state: directory
 
-  - name: Unarchive frontend files
-    ansible.builtin.unarchive:
-      src: /path/to/frontend.zip
-      dest: /tmp/
-      remote_src: yes
+  - name: unzip 
+      ansible.builtin.unarchive:
+        src: https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
+        dest: /usr/share/nginx/html
+        remote_src: yes
 
 
   - name: Expense frontend Service copy 
