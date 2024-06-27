@@ -35,7 +35,7 @@
 
     - name: npm install
       ansible.builtin.command: npm install
-        args:
+      args:
         chdir: /app
 
     - name: Expense Backend Service
