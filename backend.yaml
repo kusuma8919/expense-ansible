@@ -1,0 +1,76 @@
+- name: backend instalation 
+  hosts: backend
+  become: yes
+  tasks: 
+    - name: disable NodeJS
+      ansible.builtin.command: dnf module disable nodejs -y
+    
+    - name: enable nodejs
+      ansible.builtin.command: dnf module enable nodejs:20 -y
+
+    - name: installing nodejs
+      ansible.builtin.dnf:
+        name: nodejs
+        state: present
+
+    - name: user add
+      ansible.builtin.user:
+        name: expense 
+    
+    - name: Create a directory
+      ansible.builtin.file:
+        name: /app
+        state: directory
+
+    - name: Download the application
+      ansible.builtin.get_url:
+        url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+        dest: /tmp/backend.zip
+
+    - name: unzipping
+      ansible.builtin.unarchive:
+        src: /tmp/backend.zip
+        dest: /app
+        remote_src: yes
+
+    - name: npm install
+      ansible.builtin.command: npm install
+        args: 
+        chdir: /app
+
+    - name: Expense Backend Service
+      ansible.builtin.copy:
+        src: backend.service
+        dest: /etc/systemd/system/backend.service
+
+    - name: reload the service
+      ansible.builtin.systemd_service:
+        daemon_reload: true
+
+    - name: enable and start backend
+      ansible.builtin.service:
+        name: backend
+        enabled: yes
+        state: started
+
+    - name: Install MySQL
+      ansible.builtin.command: dnf install mysql -y
+
+    - name: Load Schema
+      ansible.builtin.shell: mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pExpenseApp@1 < /app/schema/backend.sql
+
+    - name: Restart the service
+      ansible.builtin.service:
+        name: backend
+        state: restarted
+
+
+
+
+              
+            
+
+
+    
+
+

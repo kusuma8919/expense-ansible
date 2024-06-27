@@ -1,0 +1,16 @@
+- name: db instalation 
+  hosts: mysql
+  become: yes
+  tasks: 
+    - name: Install MySQL
+      ansible.builtin.dnf:
+        name: mysql-server
+        state: present
+    - name: mysql service 
+      ansible.builtin.service:
+        name: mysql
+        enabled: yes
+        state: started
+        - name:
+          ansible.builtin.cammand: mysql_secure_installation --set-root-pass ExpenseApp@1
+          
