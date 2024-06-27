@@ -31,10 +31,12 @@
       path: /usr/share/nginx/html
       state: directory
 
-  - name: Unarchive
+  - name: Unarchive frontend files
     ansible.builtin.unarchive:
-      dest: /tmp/frontend.zip
+      src: /path/to/frontend.zip
+      dest: /tmp/
       remote_src: yes
+
 
   - name: Expense frontend Service copy 
     ansible.builtin.copy:
