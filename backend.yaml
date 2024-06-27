@@ -35,7 +35,6 @@
 
     - name: npm install
       ansible.builtin.command: npm install
-        args: 
         chdir: /app
 
     - name: Expense Backend Service
@@ -44,7 +43,7 @@
         dest: /etc/systemd/system/backend.service
 
     - name: reload the service
-      ansible.builtin.systemd_service:
+      ansible.builtin.systemd:
         daemon_reload: true
 
     - name: enable and start backend
